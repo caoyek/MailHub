@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-paper: #F5EDD6;
+  --color-paper-light: #FDF6E4;
+  --color-scroll: #DDD0B3;
+  --color-ink: #1C1410;
+  --color-brush: #6B5A45;
+  --color-vermilion: #C0392B;
+  --color-vermilion-light: #FAE8E6;
+  --color-vermilion-dark: #A93226;
+  --color-ink-green: #2D6A4F;
+  --color-ink-green-light: #D8F3DC;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 台账横线背景 */
+.ledger-lines {
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 31px,
+    #DDD0B3 31px,
+    #DDD0B3 32px
+  );
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

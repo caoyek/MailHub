@@ -1,0 +1,29 @@
+# 路由规则人工可编辑备份（与 rules.json 同步）
+# 此文件仅作人工参考，运行时以 rules.json 为准
+
+rules:
+  - name: "监控告警"
+    enabled: true
+    priority: 1
+    match:
+      from_contains: "alert@"
+      subject_contains: "[ALERT]"
+      subject_regex: null
+    targets:
+      - type: wecom
+        webhook_url: "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_KEY"
+      - type: email
+        to:
+          - ops@company.com
+
+  - name: "周报汇总"
+    enabled: true
+    priority: 2
+    match:
+      from_contains: ""
+      subject_contains: "周报"
+      subject_regex: null
+    targets:
+      - type: email
+        to:
+          - manager@company.com
