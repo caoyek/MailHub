@@ -34,13 +34,17 @@ export default function Navbar() {
 
         {/* 中 */}
         <div className="hidden md:flex items-center gap-8">
-          {["功能", "接入指南", "更新日志"].map((item) => (
+          {[
+            { label: "功能", href: "#features" },
+            { label: "接入指南", href: "#how-it-works" },
+            { label: "更新日志", href: "#" },
+          ].map((item) => (
             <a
-              key={item}
-              href="#"
+              key={item.label}
+              href={item.href}
               className="font-sans text-[14px] text-brush hover:text-vermilion transition-colors duration-200"
             >
-              {item}
+              {item.label}
             </a>
           ))}
         </div>
@@ -48,7 +52,7 @@ export default function Navbar() {
         {/* 右 */}
         <div className="flex items-center">
           <a
-            href="#"
+            href="/login"
             className="font-sans text-[13px] md:text-[14px] text-white bg-vermilion px-4 md:px-5 py-1.5 md:py-2 rounded hover:bg-vermilion-dark transition-colors duration-200"
           >
             立即部署

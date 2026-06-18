@@ -31,7 +31,7 @@ export default function Footer() {
             自建部署，数据不离境，永久免费。
           </p>
           <a
-            href="#"
+            href="/login"
             className="inline-block mt-6 md:mt-8 font-sans text-[14px] md:text-[15px] text-white bg-vermilion px-8 md:px-10 py-3 md:py-3.5 rounded hover:bg-vermilion-dark transition-colors duration-200"
           >
             立即部署，开设驿站
@@ -49,13 +49,19 @@ export default function Footer() {
             </span>
           </div>
           <div className="flex items-center gap-6">
-            {["功能", "文档", "GitHub"].map((link) => (
+            {[
+              { label: "功能", href: "#features" },
+              { label: "文档", href: "https://github.com/caoyek/MailHub" },
+              { label: "GitHub", href: "https://github.com/caoyek/MailHub" },
+            ].map((link) => (
               <a
-                key={link}
-                href="#"
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="font-sans text-[13px] text-brush hover:text-vermilion transition-colors duration-200"
               >
-                {link}
+                {link.label}
               </a>
             ))}
           </div>

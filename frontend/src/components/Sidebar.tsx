@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import SealLogo from "@/components/SealLogo";
+import { getCurrentUser } from "@/lib/api";
 import {
   LayoutDashboard,
   Mail,
@@ -21,6 +23,13 @@ const menuItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [userName, setUserName] = useState("admin");
+
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (user) setUserName(user.email);
+  }, []);
 
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-[200px] bg-ink flex flex-col z-40">
@@ -64,15 +73,14 @@ export default function Sidebar() {
 
       {/* 底部 */}
       <div className="border-t border-white/10 px-4 py-3 flex items-center justify-between">
-        <span className="font-sans text-[12px] text-white/50">
-          admin
+        <span className="font-sans text-[12px] text-white/50 truncate max-w-[120px]">
+          {userName}
         </span>
         <button
           onClick={() => {
-            if (typeof window !== "undefined") {
-              localStorage.removeItem("mailhub_token");
-              window.location.href = "/login";
-            }
+            localStorage.removeItem("mailhub_token");
+            localStorage.removeItem("mailhub_email");
+            router.push("/login");
           }}
           className="font-sans text-[12px] text-white/40 hover:text-white transition-opacity"
         >

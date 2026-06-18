@@ -126,23 +126,54 @@ export default function LogsPage() {
       </div>
 
       {/* 分页 */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-6">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+      {totalPages > 1 && (() => {
+        const pages: (number | "...")[] = [];
+        const windowSize = 2;
+        const start = Math.max(2, page - windowSize);
+        const end = Math.min(totalPages - 1, page + windowSize);
+        pages.push(1);
+        if (start > 2) pages.push("...");
+        for (let i = start; i <= end; i++) pages.push(i);
+        if (end < totalPages - 1) pages.push("...");
+        if (totalPages > 1) pages.push(totalPages);
+        return (
+          <div className="flex items-center justify-center gap-2 mt-6">
             <button
-              key={p}
-              onClick={() => setPage(p)}
-              className={`w-8 h-8 border border-scroll rounded-sm font-sans text-[13px] transition-colors ${
-                p === page
-                  ? "bg-vermilion text-white border-vermilion"
-                  : "bg-paper-light text-ink hover:border-vermilion"
-              }`}
+              onClick={() => setPage(Math.max(1, page - 1))}
+              disabled={page === 1}
+              className="h-8 px-3 border border-scroll rounded-sm font-sans text-[13px] bg-paper-light text-ink hover:border-vermilion transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {p}
+              上一页
             </button>
-          ))}
-        </div>
-      )}
+            {pages.map((p, i) =>
+              p === "..." ? (
+                <span key={`e${i}`} className="w-8 h-8 flex items-center justify-center font-sans text-[13px] text-brush">
+                  …
+                </span>
+              ) : (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
+                  className={`w-8 h-8 border border-scroll rounded-sm font-sans text-[13px] transition-colors ${
+                    p === page
+                      ? "bg-vermilion text-white border-vermilion"
+                      : "bg-paper-light text-ink hover:border-vermilion"
+                  }`}
+                >
+                  {p}
+                </button>
+              )
+            )}
+            <button
+              onClick={() => setPage(Math.min(totalPages, page + 1))}
+              disabled={page === totalPages}
+              className="h-8 px-3 border border-scroll rounded-sm font-sans text-[13px] bg-paper-light text-ink hover:border-vermilion transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              下一页
+            </button>
+          </div>
+        );
+      })()}
     </div>
   );
 }

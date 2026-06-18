@@ -76,6 +76,16 @@ export default function RulesPage() {
   const handleSave = async () => {
     if (!formName.trim()) return;
 
+    if (!formFromContains.trim() && !formSubjectContains.trim()) {
+      alert("请至少填写一个匹配条件（发件人包含 或 主题包含）");
+      return;
+    }
+
+    if (!formTargetValue.trim()) {
+      alert(formTargetType === "wecom" ? "请填写 Webhook URL" : "请填写收件邮箱");
+      return;
+    }
+
     const target =
       formTargetType === "wecom"
         ? { type: "wecom" as const, webhook_url: formTargetValue }
@@ -115,6 +125,7 @@ export default function RulesPage() {
   };
 
   const handleDelete = async (id: string) => {
+    if (!confirm("确认撤除此规则？撤除后不可恢复。")) return;
     try {
       await apiDeleteRule(id);
       await loadRules();

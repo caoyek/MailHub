@@ -15,6 +15,22 @@ import type {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+/** 从 JWT token 中提取用户信息 */
+export function getCurrentUser(): { email: string } | null {
+  if (typeof window === "undefined") return null;
+  const email = localStorage.getItem("mailhub_email");
+  if (email) return { email };
+  // 回退：从 JWT payload 解码
+  const token = localStorage.getItem("mailhub_token");
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return { email: payload.sub || "admin" };
+  } catch {
+    return { email: "admin" };
+  }
+}
+
 async function request<T>(
   path: string,
   options?: RequestInit

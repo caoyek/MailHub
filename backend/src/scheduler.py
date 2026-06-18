@@ -19,6 +19,7 @@ from src.channels.base import send_to_targets
 logger = logging.getLogger(__name__)
 
 _scheduler: AsyncIOScheduler | None = None
+_loop: asyncio.AbstractEventLoop | None = None
 
 
 def _process_message(message: ParsedMessage, account_id: str = "", smtp_config: dict = None, account_name: str = "") -> dict:
@@ -117,11 +118,10 @@ def _poll_job():
 
         def on_message(msg: ParsedMessage, _aid=account_id, _smtp=smtp_config, _name=account.get("name", "")):
             log_entry = _process_message(msg, account_id=_aid, smtp_config=_smtp, account_name=_name)
-            if broadcast_fn:
+            if broadcast_fn and _loop:
                 try:
-                    loop = asyncio.get_event_loop()
                     asyncio.run_coroutine_threadsafe(
-                        broadcast_fn(log_entry), loop
+                        broadcast_fn(log_entry), _loop
                     )
                 except Exception as e:
                     logger.warning(f"WebSocket 广播失败: {e}")
@@ -134,9 +134,10 @@ def _poll_job():
 
 def init_scheduler() -> AsyncIOScheduler:
     """初始化并启动 APScheduler"""
-    global _scheduler
+    global _scheduler, _loop
 
     interval = int(os.getenv("POLL_INTERVAL_SECONDS", "60"))
+    _loop = asyncio.get_event_loop()
     _scheduler = AsyncIOScheduler()
     _scheduler.add_job(
         _poll_job,
@@ -145,6 +146,7 @@ def init_scheduler() -> AsyncIOScheduler:
         id="imap_poll",
         name="IMAP 邮件轮询",
         replace_existing=True,
+        max_instances=1,
     )
     _scheduler.start()
     logger.info(f"APScheduler 已启动，轮询间隔: {interval}s")

@@ -6,6 +6,7 @@ parser.py - 邮件内容解析
 import email
 import uuid
 import logging
+import re
 from datetime import datetime
 from email.message import Message
 from typing import Optional
@@ -13,6 +14,16 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 logger = logging.getLogger(__name__)
+
+_HTML_TAG_RE = re.compile(r"<[^>]+>")
+
+
+def _strip_html(html: str) -> str:
+    """移除 HTML 标签，保留纯文本"""
+    text = _HTML_TAG_RE.sub("", html)
+    # 合并多余空白
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
 
 
 class ParsedMessage(BaseModel):
@@ -75,7 +86,7 @@ def parse_message(raw: Message) -> ParsedMessage:
                     payload = part.get_payload(decode=True)
                     if payload:
                         charset = part.get_content_charset() or "utf-8"
-                        body_text = payload.decode(charset, errors="replace")
+                        body_text = _strip_html(payload.decode(charset, errors="replace"))
                 except Exception as e:
                     logger.warning(f"解析 HTML 正文失败: {e}")
     else:
@@ -83,7 +94,11 @@ def parse_message(raw: Message) -> ParsedMessage:
             payload = raw.get_payload(decode=True)
             if payload:
                 charset = raw.get_content_charset() or "utf-8"
-                body_text = payload.decode(charset, errors="replace")
+                decoded = payload.decode(charset, errors="replace")
+                if raw.get_content_type() == "text/html":
+                    body_text = _strip_html(decoded)
+                else:
+                    body_text = decoded
         except Exception as e:
             logger.warning(f"解析单部分邮件正文失败: {e}")
 

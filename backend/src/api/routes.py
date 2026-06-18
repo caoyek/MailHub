@@ -3,6 +3,7 @@ routes.py - 所有 REST API + WebSocket 端点
 """
 
 import os
+import asyncio
 import logging
 from datetime import datetime, timedelta
 from typing import Optional
@@ -45,7 +46,10 @@ class ConnectionManager:
         logger.info(f"WebSocket 客户端已连接，当前连接数: {len(self.active_connections)}")
 
     def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
+        try:
+            self.active_connections.remove(websocket)
+        except ValueError:
+            pass
         logger.info(f"WebSocket 客户端已断开，当前连接数: {len(self.active_connections)}")
 
     async def broadcast(self, message: dict):
@@ -259,7 +263,7 @@ async def test_channel(channel_id: str, user: str = Depends(get_current_user)):
         return fail(f"未知渠道类型: {ch_type}")
 
     try:
-        success = channel.send(test_msg, target_config)
+        success = await asyncio.to_thread(channel.send, test_msg, target_config)
     except Exception as e:
         logger.error(f"渠道测试异常: {e}")
         store.update_channel(channel_id, {

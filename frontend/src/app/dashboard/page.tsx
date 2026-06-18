@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 import { useLiveStream } from "@/hooks/useLiveStream";
@@ -17,21 +17,31 @@ export default function DashboardPage() {
   const [weekData, setWeekData] = useState<Record<string, DayStats>>({});
   const { events } = useLiveStream(30);
   const [recentLogs, setRecentLogs] = useState<MailLog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const [statsRes, rangeRes, logsRes] = await Promise.all([
+        apiGetStats(),
+        apiGetStatsRange(7),
+        apiGetLogs(1, 6),
+      ]);
+      if (statsRes.code === 0) setStats(statsRes.data);
+      if (rangeRes.code === 0) setWeekData(rangeRes.data || {});
+      if (logsRes.code === 0 && logsRes.data) setRecentLogs(logsRes.data.items || []);
+    } catch {
+      setError("无法连接后端服务，请检查后端是否运行。");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const [statsRes, rangeRes, logsRes] = await Promise.all([
-          apiGetStats(),
-          apiGetStatsRange(7),
-          apiGetLogs(1, 6),
-        ]);
-        if (statsRes.code === 0) setStats(statsRes.data);
-        if (rangeRes.code === 0) setWeekData(rangeRes.data || {});
-        if (logsRes.code === 0 && logsRes.data) setRecentLogs(logsRes.data.items || []);
-      } catch { /* ignore */ }
-    })();
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   const slideDown = {
     initial: { opacity: 0, y: -8 },
@@ -54,7 +64,29 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      {/* 错误提示 */}
+      {error && (
+        <div className="border-l-[3px] border-vermilion bg-vermilion-light px-5 py-3 flex items-center justify-between">
+          <span className="font-sans text-[13px] text-vermilion">{error}</span>
+          <button
+            onClick={fetchData}
+            className="font-sans text-[12px] text-vermilion hover:text-vermilion-dark transition-colors ml-4"
+          >
+            重试
+          </button>
+        </div>
+      )}
+
+      {/* 加载中 */}
+      {loading && (
+        <div className="flex items-center justify-center py-20">
+          <span className="font-sans text-[13px] text-brush">加载中…</span>
+        </div>
+      )}
+
       {/* 顶部统计 */}
+      {!loading && (
+        <>
       <div className="border border-scroll bg-paper-light flex">
         {[
           { label: "今日来信", value: stats.total },
@@ -213,6 +245,8 @@ export default function DashboardPage() {
           </table>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }

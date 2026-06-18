@@ -94,6 +94,19 @@ export default function ChannelsPage() {
 
   const handleSave = async () => {
     if (!formName.trim()) return;
+
+    if (formType === "wecom" && !formWebhook.trim()) {
+      alert("请填写 Webhook URL");
+      return;
+    }
+    if (formType === "email") {
+      const emails = formEmails.split(",").map((s) => s.trim()).filter(Boolean);
+      if (emails.length === 0) {
+        alert("请填写至少一个收件邮箱");
+        return;
+      }
+    }
+
     const config =
       formType === "wecom"
         ? { webhook_url: formWebhook }
@@ -113,6 +126,7 @@ export default function ChannelsPage() {
   };
 
   const handleDelete = async (id: string) => {
+    if (!confirm("确认撤除此渠道？撤除后不可恢复。")) return;
     try {
       await apiDeleteChannel(id);
       await loadChannels();
@@ -170,6 +184,14 @@ export default function ChannelsPage() {
 
   const handleMailSave = async () => {
     if (!mName.trim() || !mEmail.trim()) return;
+    if (!mImapHost.trim()) {
+      alert("请填写 IMAP 服务器地址");
+      return;
+    }
+    if (!editMail && !mPassword) {
+      alert("请填写密码/授权码");
+      return;
+    }
 
     const data: Record<string, any> = {
       name: mName.trim(),
@@ -200,6 +222,7 @@ export default function ChannelsPage() {
   };
 
   const handleMailDelete = async (id: string) => {
+    if (!confirm("确认撤除此邮箱？撤除后不可恢复，关联的投递规则可能失效。")) return;
     try {
       await apiDeleteMailAccount(id);
       await loadMailAccounts();

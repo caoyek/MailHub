@@ -48,13 +48,15 @@ export default function Hero() {
           className="mt-8 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6"
         >
           <a
-            href="#"
+            href="/login"
             className="font-sans text-[15px] text-white bg-vermilion px-8 py-3 rounded hover:bg-vermilion-dark transition-colors duration-200 w-full sm:w-auto text-center"
           >
             开始部署
           </a>
           <a
-            href="#"
+            href="https://github.com/caoyek/MailHub"
+            target="_blank"
+            rel="noopener noreferrer"
             className="font-sans text-[15px] text-brush hover:text-vermilion transition-colors duration-200"
           >
             阅读文档 →

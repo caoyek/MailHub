@@ -30,6 +30,7 @@ export default function HowItWorks() {
 
   return (
     <motion.section
+      id="how-it-works"
       {...fadeInUp}
       className="py-14 md:py-20 px-4 md:px-6 border-y border-scroll"
     >

@@ -21,6 +21,7 @@ export default function LoginPage() {
       const res = await login(email, password);
       if (res.code === 0 && res.data?.token) {
         localStorage.setItem("mailhub_token", res.data.token);
+        localStorage.setItem("mailhub_email", res.data.email || email);
         router.push("/dashboard");
       } else {
         setError(res.msg || "验证失败");

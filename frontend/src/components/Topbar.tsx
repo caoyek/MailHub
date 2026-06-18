@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { getCurrentUser } from "@/lib/api";
 
 const pageTitles: Record<string, { title: string; sub: string }> = {
   "/dashboard": { title: "总台", sub: "今日台账" },
@@ -12,6 +14,14 @@ const pageTitles: Record<string, { title: string; sub: string }> = {
 export default function Topbar() {
   const pathname = usePathname();
   const info = pageTitles[pathname] || { title: "信驿", sub: "" };
+  const [initial, setInitial] = useState("A");
+
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (user?.email) {
+      setInitial(user.email.charAt(0).toUpperCase());
+    }
+  }, []);
 
   return (
     <header className="h-12 bg-paper-light border-b border-scroll flex items-center justify-between px-6">
@@ -38,7 +48,7 @@ export default function Topbar() {
         </div>
         <span className="text-scroll">|</span>
         <div className="w-8 h-8 rounded-full bg-ink flex items-center justify-center">
-          <span className="font-serif text-[12px] text-white">A</span>
+          <span className="font-serif text-[12px] text-white">{initial}</span>
         </div>
       </div>
     </header>
