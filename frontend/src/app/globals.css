@@ -2,41 +2,157 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════
+   信驿 MailHub — 水墨风格全局样式
+   ═══════════════════════════════════════════════ */
+
 :root {
-  --color-paper: #F5EDD6;
-  --color-paper-light: #FDF6E4;
-  --color-scroll: #DDD0B3;
-  --color-ink: #1C1410;
-  --color-brush: #6B5A45;
-  --color-vermilion: #C0392B;
-  --color-vermilion-light: #FAE8E6;
-  --color-vermilion-dark: #A93226;
-  --color-ink-green: #2D6A4F;
-  --color-ink-green-light: #D8F3DC;
+  --burnt-ink: #1a1a1a;
+  --dense-ink: #333333;
+  --light-ink: #666666;
+  --pale-ink: #999999;
+  --seal-red: #C41E3A;
+  --gold: #D4AF37;
+  --paper: #F8F5F0;
+  --paper-light: #FFFFF0;
 }
 
+/* ─── 书法字体 ─── */
+.font-calligraphy-cao {
+  font-family: 'Liu Jian Mao Cao', cursive;
+}
+
+.font-calligraphy-xing {
+  font-family: 'Ma Shan Zheng', cursive;
+}
+
+.font-calligraphy-xingcao {
+  font-family: 'Zhi Mang Xing', cursive;
+}
+
+.font-body-kai {
+  font-family: 'ZCOOL XiaoWei', serif;
+}
+
+.font-seal {
+  font-family: 'ZCOOL KuaiLe', cursive;
+}
+
+/* ─── 竖排文字 ─── */
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* ─── 基础样式 ─── */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
+  background-color: var(--paper);
+  background-image: url("https://www.transparenttextures.com/patterns/p6.png");
+  color: var(--burnt-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* 台账横线背景 */
-.ledger-lines {
-  background-image: repeating-linear-gradient(
-    transparent,
-    transparent 31px,
-    #DDD0B3 31px,
-    #DDD0B3 32px
-  );
+/* ─── 雾气漂浮动画 ─── */
+@keyframes mist-drift {
+  0%, 100% {
+    transform: translate(-3%, -3%);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translate(3%, 3%);
+    opacity: 0.35;
+  }
 }
 
-/* 减少动画偏好 */
+.mist-drift {
+  background: radial-gradient(circle, white 0%, transparent 80%);
+  filter: blur(100px);
+  animation: mist-drift 20s infinite ease-in-out;
+}
+
+/* ─── 墨迹晕染动画 ─── */
+@keyframes ink-bleed {
+  0% {
+    filter: blur(15px);
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-ink-bleed {
+  animation: ink-bleed 3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+/* ─── 淡入动画 ─── */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 4s ease-out forwards;
+}
+
+/* ─── 印章盖下动画 ─── */
+@keyframes seal-stamp {
+  0% {
+    transform: scale(2) rotate(-15deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.9) rotate(2deg);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1.05) rotate(-1deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* ─── 笔锋显现 ─── */
+@keyframes brush-reveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* ─── 滚动条样式 ─── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--paper);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--seal-red);
+}
+
+/* ─── 减少动画偏好 ─── */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

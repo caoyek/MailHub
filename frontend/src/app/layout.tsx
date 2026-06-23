@@ -35,8 +35,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
+      <head>
+        {/* 书法字体 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Liu+Jian+Mao+Cao&family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=ZCOOL+XiaoWei&family=ZCOOL+KuaiLe&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
-        className={`${notoSerifSC.variable} ${notoSansSC.variable} ${jetbrainsMono.variable} font-sans bg-paper text-ink antialiased`}
+        className={`${notoSerifSC.variable} ${notoSansSC.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         {children}
       </body>

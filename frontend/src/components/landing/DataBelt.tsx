@@ -2,43 +2,46 @@
 
 import { motion } from "framer-motion";
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 16 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: "easeOut" },
-};
+const stats = [
+  { value: "10,000+", label: "日均处理", icon: "封" },
+  { value: "99.9%", label: "准时投递", icon: "达" },
+  { value: "5 分钟", label: "完成接入", icon: "速" },
+];
 
 export default function DataBelt() {
-  const items = [
-    { num: "10,000+", label: "日均处理" },
-    { num: "99.9%", label: "准时投递" },
-    { num: "5 分钟", label: "完成接入" },
-  ];
-
   return (
-    <motion.section
-      {...fadeInUp}
-      className="bg-ink py-8 md:py-5"
-    >
-      <div className="max-w-[1080px] mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
-        {items.map((item, i) => (
-          <div key={item.label} className="flex items-center">
-            <div className="text-center px-6 md:px-16">
-              <span className="font-mono text-[20px] md:text-[24px] text-vermilion font-bold">
-                {item.num}
-              </span>
-              <span className="block font-sans text-[11px] md:text-[12px] text-white/70 mt-1">
-                {item.label}
-              </span>
-            </div>
-            {i < items.length - 1 && (
-              <span className="text-white/20 font-mono text-[16px] select-none hidden md:inline">
-                |
-              </span>
-            )}
-          </div>
-        ))}
+    <section className="relative bg-[#FDF8F0] py-14 md:py-16 overflow-hidden border-y border-[#D4C9B5]">
+      <div className="max-w-[1000px] mx-auto px-6">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-0">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.15, duration: 0.6 }}
+              className={`flex items-center gap-6 ${
+                i < stats.length - 1 ? "md:pr-12 md:border-r md:border-[#D4C9B5]" : ""
+              } ${i > 0 ? "md:pl-12" : ""}`}
+            >
+              {/* 中式字符标 */}
+              <div className="relative w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
+                <span className="font-serif text-[#1a1a1a] text-[22px] md:text-[26px] font-bold">
+                  {stat.icon}
+                </span>
+              </div>
+              <div>
+                <div className="font-mono text-[28px] md:text-[34px] text-[#1A1714] font-bold leading-none tracking-tight">
+                  {stat.value}
+                </div>
+                <div className="font-sans text-[12px] text-[#6B5A45] mt-1.5 tracking-wider">
+                  {stat.label}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </motion.section>
+    </section>
   );
 }

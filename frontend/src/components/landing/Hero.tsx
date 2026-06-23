@@ -1,196 +1,82 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { InkSplashSVG, BrushStroke } from "./VisualEffects";
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 16 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: "easeOut" },
-};
+/* ═══════════════════════════════════════════════
+   Hero 首屏 — 水墨风格（居中版）
+   
+   「鸿雁传书，一驿通达」
+   ═══════════════════════════════════════════════ */
 
 export default function Hero() {
   return (
-    <section className="pt-24 md:pt-28 pb-12 md:pb-16 px-4 md:px-6">
-      <div className="max-w-[1080px] mx-auto text-center">
-        {/* Badge */}
-        <motion.div {...fadeInUp} className="mb-8 md:mb-10">
-          <span className="inline-block border border-scroll bg-paper-light px-3 py-1 rounded-sm font-sans text-[12px] md:text-[13px] text-brush">
-            <span className="text-vermilion mr-1">✦</span>
-            现已支持企业微信群机器人
+    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6">
+      {/* 背景墨迹装饰 */}
+      <div className="absolute left-[-5%] bottom-0 opacity-10 scale-150 pointer-events-none">
+        <InkSplashSVG className="w-[600px] h-[600px] text-[#1a1a1a]" />
+      </div>
+      <div className="absolute right-[-5%] top-0 opacity-5 scale-125 pointer-events-none rotate-180">
+        <InkSplashSVG className="w-[500px] h-[500px] text-[#1a1a1a]" />
+      </div>
+
+      {/* 雾气效果 */}
+      <div className="absolute inset-0 opacity-15 mist-drift pointer-events-none" />
+
+      {/* 主内容 - 居中 */}
+      <div className="relative z-10 w-full max-w-4xl mx-auto text-center">
+        {/* 顶部标语 */}
+        <div className="mb-6 flex items-center justify-center gap-4 opacity-0 animate-fade-in">
+          <span className="text-[#D4AF37] tracking-[0.6em] font-serif text-xs uppercase">
+            岁在乙巳 · 鸿雁传书
           </span>
-        </motion.div>
+        </div>
+        <div className="flex justify-center mb-8">
+          <BrushStroke width={100} height={4} className="text-[#D4AF37]/40" />
+        </div>
 
         {/* 主标题 */}
-        <motion.h1
-          {...fadeInUp}
-          transition={{ ...fadeInUp.transition, delay: 0.1 }}
-          className="font-serif font-bold text-ink leading-tight tracking-wide"
-          style={{ fontSize: "clamp(32px, 6vw, 72px)" }}
-        >
-          书信千里，
-          <br />
-          <span className="text-vermilion">一驿</span>转达。
-        </motion.h1>
+        <h1 className="font-calligraphy-xing text-[14vw] md:text-[10vw] lg:text-[8rem] leading-[0.9] text-[#1a1a1a] mb-4 select-none animate-ink-bleed">
+          信驿
+        </h1>
+        <p className="font-serif text-lg md:text-xl text-[#666] tracking-[0.3em] mb-8">
+          M A I L H U B
+        </p>
 
         {/* 副标题 */}
-        <motion.p
-          {...fadeInUp}
-          transition={{ ...fadeInUp.transition, delay: 0.2 }}
-          className="mt-6 md:mt-8 mx-auto font-sans text-[15px] md:text-[17px] text-brush leading-[2] max-w-[520px] md:whitespace-nowrap"
-        >
-          汇聚各平台邮件，按规则自动转达至企微、飞书、邮箱。
-        </motion.p>
+        <div className="max-w-lg mx-auto mb-10">
+          <p className="font-body-kai text-xl md:text-2xl text-[#333] leading-relaxed mb-6">
+            「一驿通达，万邮归一」
+          </p>
+          <p className="font-body-kai text-base md:text-lg text-[#666] leading-relaxed">
+            聚合多邮箱，智能转发，尽在掌握。
+          </p>
+        </div>
 
-        {/* CTA */}
-        <motion.div
-          {...fadeInUp}
-          transition={{ ...fadeInUp.transition, delay: 0.3 }}
-          className="mt-8 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6"
-        >
+        {/* CTA 按钮组 */}
+        <div className="flex flex-wrap justify-center gap-6 items-center">
           <a
             href="/login"
-            className="font-sans text-[15px] text-white bg-vermilion px-8 py-3 rounded hover:bg-vermilion-dark transition-colors duration-200 w-full sm:w-auto text-center"
+            className="px-8 py-3 border-2 border-[#1a1a1a] font-calligraphy-xing text-lg md:text-xl hover:bg-[#1a1a1a] hover:text-white transition-all duration-500"
           >
-            开始部署
+            开启信驿
           </a>
           <a
             href="https://github.com/caoyek/MailHub"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-sans text-[15px] text-brush hover:text-vermilion transition-colors duration-200"
+            className="px-8 py-3 border-2 border-[#1a1a1a] font-calligraphy-xing text-lg md:text-xl hover:bg-[#1a1a1a] hover:text-white transition-all duration-500"
           >
-            阅读文档 →
+            源码部署
           </a>
-        </motion.div>
+        </div>
+      </div>
 
-        {/* Mockup */}
-        <motion.div
-          {...fadeInUp}
-          transition={{ ...fadeInUp.transition, delay: 0.4 }}
-          className="mt-16 border border-scroll rounded overflow-hidden bg-paper-light shadow-paper-lg hidden md:block"
-        >
-          <div className="w-full h-[380px] flex">
-            {/* 台头 */}
-            <div className="w-full flex flex-col">
-              {/* 顶部深色条 */}
-              <div className="bg-ink px-6 py-3 flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-vermilion" />
-                <span className="font-serif text-[12px] text-white/80 tracking-wider">
-                  信驿 · 管理台账
-                </span>
-              </div>
-              {/* 内容区 */}
-              <div className="flex flex-1">
-                {/* 左侧菜单 */}
-                <div className="w-[160px] bg-paper border-r border-scroll py-4 px-3">
-                  {["总台", "信件记录", "投递规则", "驿路渠道"].map(
-                    (item, i) => (
-                      <div
-                        key={item}
-                        className={`py-2 px-3 mb-1 font-serif text-[12px] rounded-sm ${
-                          i === 0
-                            ? "text-white bg-vermilion/20 border-l-[3px] border-vermilion"
-                            : "text-brush/60"
-                        }`}
-                      >
-                        {item}
-                      </div>
-                    )
-                  )}
-                </div>
-                {/* 右侧内容 */}
-                <div className="flex-1 p-5">
-                  {/* 统计格 */}
-                  <div className="flex flex-nowrap border border-scroll mb-4">
-                    {[
-                      { label: "今日来信", value: "42" },
-                      { label: "准时投达", value: "40" },
-                      { label: "在用驿路", value: "3" },
-                      { label: "平均耗时", value: "138ms" },
-                    ].map((item, i, arr) => (
-                      <div
-                        key={item.label}
-                        className={`flex-1 px-4 py-3 ${
-                          i < arr.length - 1
-                            ? "border-r border-scroll"
-                            : ""
-                        }`}
-                      >
-                        <div className="font-serif text-[10px] text-brush tracking-wider">
-                          {item.label}
-                        </div>
-                        <div className="font-serif text-[20px] text-vermilion font-bold mt-1">
-                          {item.value}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  {/* 模拟表格 */}
-                  <div className="border border-scroll">
-                    <div className="bg-ink px-4 py-2 flex items-center">
-                      <span className="font-serif text-[10px] text-white/70 tracking-wider w-[60px]">收信时间</span>
-                      <span className="font-serif text-[10px] text-white/70 tracking-wider w-[130px]">发件方</span>
-                      <span className="font-serif text-[10px] text-white/70 tracking-wider flex-1">信件主题</span>
-                      <span className="font-serif text-[10px] text-white/70 tracking-wider w-[36px] text-right">状态</span>
-                    </div>
-                    {[
-                      {
-                        time: "09:32",
-                        from: "alert@monitoring",
-                        subject: "CPU 使用率超过 90%",
-                        status: "达",
-                      },
-                      {
-                        time: "09:15",
-                        from: "report@analytics",
-                        subject: "日报：数据汇总",
-                        status: "达",
-                      },
-                      {
-                        time: "08:45",
-                        from: "alert@monitoring",
-                        subject: "磁盘空间不足",
-                        status: "误",
-                      },
-                      {
-                        time: "08:30",
-                        from: "team@company",
-                        subject: "周报：工作总结",
-                        status: "达",
-                      },
-                    ].map((row, i) => (
-                      <div
-                        key={i}
-                        className={`px-4 py-2.5 flex items-center border-b border-scroll ${
-                          i % 2 === 0 ? "bg-paper-light" : "bg-paper"
-                        }`}
-                      >
-                        <span className="font-serif text-[11px] text-brush w-[60px]">
-                          {row.time}
-                        </span>
-                        <span className="font-serif text-[11px] text-ink w-[130px] truncate">
-                          {row.from}
-                        </span>
-                        <span className="font-serif text-[11px] text-ink flex-1 truncate">
-                          {row.subject}
-                        </span>
-                        <span
-                          className={`font-serif text-[11px] font-medium w-[36px] text-right ${
-                            row.status === "达"
-                              ? "text-ink-green"
-                              : "text-vermilion"
-                          }`}
-                        >
-                          {row.status}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+      {/* 滚动引导 */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-30 animate-pulse">
+        <div className="w-[1px] h-16 bg-gradient-to-b from-transparent to-[#333]" />
+        <span className="font-calligraphy-xing text-xs tracking-widest text-[#666]">
+          下 寻
+        </span>
       </div>
     </section>
   );
