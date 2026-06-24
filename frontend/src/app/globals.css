@@ -31,7 +31,7 @@
 }
 
 .font-body-kai {
-  font-family: 'ZCOOL XiaoWei', serif;
+  font-family: var(--font-serif), 'Noto Serif SC', 'Noto Serif Simplified Chinese', serif;
 }
 
 .font-seal {
